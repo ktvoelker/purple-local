@@ -24,14 +24,18 @@ def main():
 
 
 @main.command()
+@click.option('--debug', is_flag=True, default=False)
 @click.option('--max-count', type=int, default=8)
 @click.option('--max-distance-km', type=float, default=2)
 @click.argument('output_file', type=click.File('w', encoding='utf-8'), required=True)
 @click.argument('latitude', type=float, required=True)
 @click.argument('longitude', type=float, required=True)
-def find_nearest_sensors(max_count, max_distance_km, output_file, latitude, longitude):
+def find_nearest_sensors(debug, max_count, max_distance_km, output_file, latitude, longitude):
     resp = requests.get('https://www.purpleair.com/json')
     resp.raise_for_status()
+    if debug:
+        with open('debug.json', 'wb') as debug_handle:
+            debug_handle.write(resp.content)
     sensors = resp.json()['results']
     here = LatLon(latitude, longitude)
     max_distance_m = max_distance_km * 1000

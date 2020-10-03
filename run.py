@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 from statistics import mean, median, stdev
+import sys
 import time
 from typing import NamedTuple
 
@@ -58,7 +59,7 @@ def find_nearest_sensors(max_count, max_distance_km, output_file, latitude, long
                 label=sensor['Label'],
                 distance_m=distance_m,
             ))
-    print('Found %d nearby outdoor sensors (out of %d candidates).' % (len(near), n_candidates))
+    sys.stderr.write('Found %d nearby outdoor sensors (out of %d candidates).\n' % (len(near), n_candidates))
     nearest = sorted(near, key=lambda x: x.distance_m)[:max_count]
     output = {
         'timestamp': timestamp,
